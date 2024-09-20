@@ -108,7 +108,7 @@ class DriverLicenseUpdateView(LoginRequiredMixin, generic.UpdateView):
 
     def get_success_url(self):
         return reverse(
-            "taxi:driver-detail", args=(self.get_context_data()["object"].id,)
+            "taxi:driver-detail", args=(self.object.id,)
         )
 
 
