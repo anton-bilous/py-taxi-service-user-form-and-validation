@@ -63,6 +63,17 @@ class CarListView(LoginRequiredMixin, generic.ListView):
 class CarDetailView(LoginRequiredMixin, generic.DetailView):
     model = Car
 
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+
+        if request.user.is_authenticated:
+            if request.POST["car-action"] == "add":
+                self.object.drivers.add(request.user)
+            else:
+                self.object.drivers.remove(request.user)
+
+        return self.render_to_response(context=self.get_context_data())
+
 
 class CarCreateView(LoginRequiredMixin, generic.CreateView):
     model = Car
@@ -110,21 +121,3 @@ class DriverLicenseUpdateView(LoginRequiredMixin, generic.UpdateView):
         return reverse(
             "taxi:driver-detail", args=(self.object.id,)
         )
-
-
-@login_required
-def car_add_driver_view(request: HttpRequest, pk: int, driver_id: int):
-    car = Car.objects.get(pk=pk)
-    driver = Driver.objects.get(id=driver_id)
-    car.drivers.add(driver)
-
-    return HttpResponseRedirect(reverse("taxi:car-detail", args=(pk,)))
-
-
-@login_required
-def car_remove_driver_view(request: HttpRequest, pk: int, driver_id: int):
-    car = Car.objects.get(pk=pk)
-    driver = Driver.objects.get(id=driver_id)
-    car.drivers.remove(driver)
-
-    return HttpResponseRedirect(reverse("taxi:car-detail", args=(pk,)))

@@ -13,11 +13,16 @@
   </h1>
   <p>Manufacturer: ({{ car.manufacturer.name }}, {{ car.manufacturer.country }})</p>
   <h1>Drivers
-    {% if user not in car.drivers.all %}
-      <a class="btn btn-success float-right" href="{% url 'taxi:car-add-driver' car.id user.id %}">Assign me to this car</a>
-    {% else %}
-      <a class="btn btn-danger float-right" href="{% url 'taxi:car-remove-driver' car.id user.id %}">Delete me from this car</a>
-    {% endif %}
+    <form method="post" class="float-right">
+      {% csrf_token %}
+      {% if user not in car.drivers.all %}
+        <input type="hidden" value="add" name="car-action">
+        <input type="submit" class="btn btn-success" value="Assign me to this car">
+      {% else %}
+        <input type="hidden" value="remove" name="car-action">
+        <input type="submit" class="btn btn-danger" value="Delete me from this car">
+      {% endif %}
+    </form>
   </h1>
   <hr>
   <ul>
