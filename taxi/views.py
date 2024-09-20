@@ -5,8 +5,8 @@ from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpRequest, HttpResponseRedirect
 
-from .models import Driver, Car, Manufacturer
-from .forms import CarForm, DriverCreationForm, DriverLicenseUpdateForm
+from taxi.models import Driver, Car, Manufacturer
+from taxi.forms import CarForm, DriverCreationForm, DriverLicenseUpdateForm
 
 
 @login_required
