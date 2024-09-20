@@ -63,6 +63,9 @@ class CarListView(LoginRequiredMixin, generic.ListView):
 class CarDetailView(LoginRequiredMixin, generic.DetailView):
     model = Car
 
+    def get_queryset(self):
+        return super().get_queryset().prefetch_related("drivers")
+
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
 
